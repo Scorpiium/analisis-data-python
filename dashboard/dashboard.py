@@ -9,14 +9,12 @@ st.set_page_config(page_title="Dashboard Peminjaman Sepeda")
 st.title("Dashboard Peminjaman Sepeda")
 
 def load_data():
-    # Muat data dari file CSV
     try:
-        df = pd.read_csv("main_data.csv")
+        df = pd.read_csv("dashboard/main_data.csv")
     except Exception as e:
         st.error("Gagal memuat file main_data.csv. Pastikan file ada di direktori yang sama.")
         return None, None
 
-    # Konversi kolom tanggal dan jam menjadi datetime (jika tersedia)
     if 'dteday' in df.columns and 'hr' in df.columns:
         df['datetime'] = pd.to_datetime(df['dteday']) + pd.to_timedelta(df['hr'], unit='h')
     else:
@@ -24,7 +22,6 @@ def load_data():
 
     df_hour_full = df.copy()
 
-    # Mapping kondisi cuaca
     weather_labels = {
         1: "Clear/Few clouds",
         2: "Mist/Cloudy",
@@ -36,7 +33,6 @@ def load_data():
     else:
         st.warning("Kolom 'weathersit' tidak ditemukan pada dataset.")
 
-    # Buat data agregat bulanan jika tersedia kolom 'mnth' dan 'yr'
     if 'mnth' in df_hour_full.columns and 'yr' in df_hour_full.columns:
         # Misal dataset menggunakan 0 dan 1 untuk tahun, mapping ke 2011 dan 2012
         df_hour_full['Year'] = df_hour_full['yr'].map({0: 2011, 1: 2012})
@@ -53,27 +49,20 @@ def load_data():
 
     return df_hour_full, monthly_data
 
-# Muat data
 df_hour_full, monthly_data = load_data()
 if df_hour_full is None or monthly_data is None:
     st.stop()
 
-# Sidebar: Filter untuk tren peminjaman per bulan
 st.sidebar.header("Filter Tren Peminjaman")
 selected_years = st.sidebar.multiselect(
     "Pilih Tahun:",
     options=sorted(monthly_data['Year'].unique()) if not monthly_data.empty else [2011, 2012],
     default=sorted(monthly_data['Year'].unique()) if not monthly_data.empty else [2011, 2012]
 )
-#############################
-# Tampilkan Tabel Dataset (sebagian data)
-#############################
+
 st.subheader("Dataset")
 st.dataframe(df_hour_full.head())
 
-#############################
-# Visualisasi 1: Pengaruh Cuaca terhadap Total Penggunaan Sepeda
-#############################
 st.subheader("Pengaruh Kondisi Cuaca terhadap Total Penggunaan Sepeda")
 weather_summary = df_hour_full.groupby('weather_label', as_index=False)['cnt'].sum()
 weather_order = [
@@ -102,9 +91,6 @@ for p in ax1.patches:
                  ha='center', va='bottom', fontsize=8, color='black')
 st.pyplot(fig1)
 
-#############################
-# Visualisasi 2: Tren Peminjaman Sepeda Per Bulan
-#############################
 st.subheader("Tren Peminjaman Sepeda Per Bulan")
 if not monthly_data.empty:
     filtered_data = monthly_data[monthly_data['Year'].isin(selected_years)]
@@ -134,14 +120,11 @@ monthly_data_pivot = df_hour_full.groupby(['yr', 'mnth'])['cnt'].sum().reset_ind
 monthly_data_pivot['Year'] = monthly_data_pivot['yr'].map({0: 2011, 1: 2012})
 monthly_data_pivot.rename(columns={'mnth': 'Month', 'cnt': 'Total_Rentals'}, inplace=True)
 
-# Membuat pivot table dengan indeks bulan dan kolom tahun
 pivot_table = monthly_data_pivot.pivot(index='Month', columns='Year', values='Total_Rentals')
 
-# Hitung selisih (peningkatan) absolute antar tahun
 pivot_table['Change'] = pivot_table[2012] - pivot_table[2011]
 pivot_table['Change_str'] = pivot_table['Change'].apply(lambda x: f"+{x:,.0f}" if x >= 0 else f"{x:,.0f}")
 
-# Fungsi untuk menghitung persentase perubahan
 def calc_pct(row):
     if row[2011] == 0:
         return None
@@ -166,7 +149,6 @@ if total_2011 != 0:
 else:
     total_pct_str = "N/A"
 
-# Membuat baris Total
 total_row = pd.DataFrame({
     "2011": [total_2011],
     "2012": [total_2012],

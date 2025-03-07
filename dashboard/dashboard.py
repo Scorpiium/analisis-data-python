@@ -4,8 +4,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-st.set_page_config(page_title="Dashboard Peminjaman Sepeda")
-st.title("🚲 Dashboard Peminjaman Sepeda 🚲")
+st.set_page_config(page_title="Dashboard Bike Sharing")
+st.title("🚲 Dashboard Bike Sharing 🚲")
 
 def load_data():
     try:
@@ -58,7 +58,7 @@ selected_years = st.sidebar.multiselect(
     default=sorted(monthly_data['Year'].unique()) if not monthly_data.empty else [2011, 2012]
 )
 
-st.subheader("Dataset")
+st.subheader("📄 Dataset")
 st.dataframe(df_hour_full.head())
 
 st.subheader("🌻 Pengaruh Kondisi Cuaca terhadap Total Penggunaan Sepeda")

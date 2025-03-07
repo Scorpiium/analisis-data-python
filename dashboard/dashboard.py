@@ -4,7 +4,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-# Konfigurasi halaman Streamlit
 st.set_page_config(page_title="Dashboard Peminjaman Sepeda")
 st.title("Dashboard Peminjaman Sepeda")
 
@@ -34,7 +33,6 @@ def load_data():
         st.warning("Kolom 'weathersit' tidak ditemukan pada dataset.")
 
     if 'mnth' in df_hour_full.columns and 'yr' in df_hour_full.columns:
-        # Misal dataset menggunakan 0 dan 1 untuk tahun, mapping ke 2011 dan 2012
         df_hour_full['Year'] = df_hour_full['yr'].map({0: 2011, 1: 2012})
         monthly_data = df_hour_full.groupby(['mnth', 'Year'], as_index=False)['cnt'].sum()
         monthly_data = monthly_data.rename(columns={'mnth': 'Month', 'cnt': 'Total_Rentals'})
@@ -80,7 +78,7 @@ sns.barplot(
     palette='viridis',
     ax=ax1
 )
-ax1.set_title('Pengaruh Kondisi Cuaca terhadap Total Penggunaan Sepeda')
+ax1.set_title('')
 ax1.set_xlabel('Kondisi Cuaca')
 ax1.set_ylabel('Total Jumlah Peminjaman (Juta)')
 plt.xticks(rotation=45)
@@ -107,7 +105,7 @@ if not monthly_data.empty:
             palette={2011: 'blue', 2012: 'red'},
             ax=ax2
         )
-        ax2.set_title("Tren Peminjaman Sepeda Per Bulan")
+        ax2.set_title("")
         ax2.set_xlabel("Bulan")
         ax2.set_ylabel("Total Peminjaman")
         ax2.set_xticks(np.arange(1, 13, 1))

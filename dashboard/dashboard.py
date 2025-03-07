@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 
 st.set_page_config(page_title="Dashboard Peminjaman Sepeda")
-st.title("Dashboard Peminjaman Sepeda")
+st.title("🚲 Dashboard Peminjaman Sepeda 🚲")
 
 def load_data():
     try:
@@ -61,7 +61,7 @@ selected_years = st.sidebar.multiselect(
 st.subheader("Dataset")
 st.dataframe(df_hour_full.head())
 
-st.subheader("Pengaruh Kondisi Cuaca terhadap Total Penggunaan Sepeda")
+st.subheader("🌻 Pengaruh Kondisi Cuaca terhadap Total Penggunaan Sepeda")
 weather_summary = df_hour_full.groupby('weather_label', as_index=False)['cnt'].sum()
 weather_order = [
     "Clear/Few clouds",
@@ -89,7 +89,7 @@ for p in ax1.patches:
                  ha='center', va='bottom', fontsize=8, color='black')
 st.pyplot(fig1)
 
-st.subheader("Tren Peminjaman Sepeda Per Bulan")
+st.subheader("📈 Tren Peminjaman Sepeda Per Bulan")
 if not monthly_data.empty:
     filtered_data = monthly_data[monthly_data['Year'].isin(selected_years)]
     if filtered_data.empty:

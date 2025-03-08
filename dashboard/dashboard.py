@@ -10,7 +10,10 @@ st.title("🚲 Dashboard Bike Sharing 🚲")
 def load_data():
     try:
         df = pd.read_csv("dashboard/main_data.csv")
-
+    except Exception as e:
+        st.error("Gagal memuat file main_data.csv. Pastikan file ada di direktori yang sama.")
+        return None, None
+    
     if 'dteday' in df.columns and 'hr' in df.columns:
         df['datetime'] = pd.to_datetime(df['dteday']) + pd.to_timedelta(df['hr'], unit='h')
     else:

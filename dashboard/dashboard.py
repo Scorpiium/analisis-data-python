@@ -9,7 +9,6 @@ st.title("🚲 Dashboard Bike Sharing 🚲")
 
 def load_data():
     try:
-        # Ganti path "dashboard/main_data.csv" dengan path yang sesuai
         df = pd.read_csv("dashboard/main_data.csv")
     except Exception as e:
         st.error("Gagal memuat file main_data.csv. Pastikan file ada di direktori yang sama.")
@@ -22,7 +21,6 @@ def load_data():
 
     df_hour_full = df.copy()
 
-    # Mapping kondisi cuaca
     weather_labels = {
         1: "Clear/Few clouds",
         2: "Mist/Cloudy",
@@ -34,7 +32,6 @@ def load_data():
     else:
         st.warning("Kolom 'weathersit' tidak ditemukan pada dataset.")
 
-    # Agregasi data bulanan
     if 'mnth' in df_hour_full.columns and 'yr' in df_hour_full.columns:
         df_hour_full['Year'] = df_hour_full['yr'].map({0: 2011, 1: 2012})
         monthly_data = df_hour_full.groupby(['mnth', 'Year'], as_index=False)['cnt'].sum()
@@ -54,7 +51,6 @@ df_hour_full, monthly_data = load_data()
 if df_hour_full is None or monthly_data is None:
     st.stop()
 
-# Sidebar Filter
 st.sidebar.header("Filter Tren Peminjaman")
 if not monthly_data.empty:
     all_years = sorted(monthly_data['Year'].unique())

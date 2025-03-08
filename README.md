@@ -1,6 +1,6 @@
 # 🚲 Bike Sharing Dashboard
 
-## Instalasi Packet
+## Instalasi Library
 ```
 pip install streamlit pandas numpy matplotlib seaborn
 ```

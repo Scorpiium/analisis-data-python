@@ -9,7 +9,7 @@ st.title("🚲 Dashboard Bike Sharing 🚲")
 
 def load_data():
     try:
-        df = pd.read_csv("dashboard/main_data.csv")
+        df = pd.read_csv("main_data.csv")
     except Exception as e:
         st.error("Gagal memuat file main_data.csv. Pastikan file ada di direktori yang sama.")
         return None, None
